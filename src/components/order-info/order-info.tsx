@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { getIngredientsSelector } from 'src/services/ingredients/slice';
 import { getOrderByNumber } from 'src/services/order/actions';
 import { getOrderByNumberSelector, clearOrder } from 'src/services/order/slice';
+import { Modal } from '../modal';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams();
@@ -68,5 +69,9 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return (
+    <Modal title={orderInfo.number.toString()}>
+      <OrderInfoUI orderInfo={orderInfo} />
+    </Modal>
+  );
 };

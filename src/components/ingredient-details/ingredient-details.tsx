@@ -4,6 +4,7 @@ import { IngredientDetailsUI } from '../ui/ingredient-details';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'src/services/store';
 import { getIngredientsSelector } from 'src/services/ingredients/slice';
+import { Modal } from '../modal';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
@@ -15,5 +16,9 @@ export const IngredientDetails: FC = () => {
     return <Preloader />;
   }
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  return (
+    <Modal title={'Детали ингредиента'}>
+      <IngredientDetailsUI ingredientData={ingredientData} />
+    </Modal>
+  );
 };

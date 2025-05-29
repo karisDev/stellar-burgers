@@ -7,7 +7,8 @@ import {
   clearOrderModal,
   getConstructorSelector,
   getOrderModalDataSelector,
-  getOrderRequestSelector
+  getOrderRequestSelector,
+  resetIngredients
 } from 'src/services/burger-constructor/slice';
 import { getUserSelector } from 'src/services/user/slice';
 import { orderBurger } from 'src/services/burger-constructor/actions';
@@ -35,7 +36,9 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-    dispatch(orderBurger(ingredientsIds));
+    dispatch(orderBurger(ingredientsIds)).then(() =>
+      dispatch(resetIngredients())
+    );
   };
 
   const closeOrderModal = () => dispatch(clearOrderModal());

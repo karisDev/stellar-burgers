@@ -56,10 +56,12 @@ export const burgerConstructorSlice = createSlice({
         ];
       }
     },
-    clearOrderModal: (state) => {
-      state.orderModalData = null;
+    resetIngredients: (state) => {
       state.bun = null;
       state.ingredients = [];
+    },
+    clearOrderModal: (state) => {
+      state.orderModalData = null;
     }
   },
   selectors: {
@@ -91,7 +93,8 @@ export const {
   removeIngredient,
   moveIngredientUp,
   moveIngredientDown,
-  clearOrderModal
+  clearOrderModal,
+  resetIngredients
 } = burgerConstructorSlice.actions;
 
 export const {
