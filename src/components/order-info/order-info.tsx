@@ -1,21 +1,29 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useDispatch, useSelector } from 'src/services/store';
+import { useParams } from 'react-router-dom';
+import { getIngredientsSelector } from 'src/services/ingredients/slice';
+import { getOrderByNumber } from 'src/services/order/actions';
+import { getOrderByNumberSelector, clearOrder } from 'src/services/order/slice';
+import { Modal } from '../modal';
 
-export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+import styles from './order-info.module.css';
 
-  const ingredients: TIngredient[] = [];
+export const OrderInfo: FC<{ asModal?: boolean }> = ({ asModal }) => {
+  const { number } = useParams();
+
+  const dispatch = useDispatch();
+  const orderData = useSelector(getOrderByNumberSelector);
+  const ingredients: TIngredient[] = useSelector(getIngredientsSelector);
+
+  useEffect(() => {
+    if (number) {
+      dispatch(getOrderByNumber(Number(number)));
+      dispatch(clearOrder());
+    }
+  }, [dispatch, number]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -59,9 +67,26 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
+  const Wrapper = asModal ? Modal : 'div';
+
   if (!orderInfo) {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  if (asModal) {
+    return (
+      <Modal title={`#${orderInfo.number.toString()}`}>
+        <OrderInfoUI orderInfo={orderInfo} />
+      </Modal>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <h3 className={`${styles.header} text text_type_main-medium`}>
+        #{orderInfo.number.toString()}
+      </h3>
+      <OrderInfoUI orderInfo={orderInfo} />
+    </div>
+  );
 };
