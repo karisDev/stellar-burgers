@@ -72,16 +72,15 @@ const App = () => {
 
       {location.state?.background && (
         <Routes>
+          <Route path='/feed/:number' element={<OrderInfo asModal />} />
           <Route
-            path='/feed/:number'
-            element={
-              <Modal title='' onClose={() => navigate(-1)}>
-                <OrderInfo />
-              </Modal>
-            }
+            path='/ingredients/:id'
+            element={<IngredientDetails asModal />}
           />
-          <Route path='/ingredients/:id' element={<IngredientDetails />} />
-          <Route path='/profile/orders/:number' element={<OrderInfo />} />
+          <Route
+            path='/profile/orders/:number'
+            element={<OrderInfo asModal />}
+          />
         </Routes>
       )}
     </div>

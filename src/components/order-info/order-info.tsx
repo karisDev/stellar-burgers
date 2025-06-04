@@ -9,7 +9,9 @@ import { getOrderByNumber } from 'src/services/order/actions';
 import { getOrderByNumberSelector, clearOrder } from 'src/services/order/slice';
 import { Modal } from '../modal';
 
-export const OrderInfo: FC = () => {
+import styles from './order-info.module.css';
+
+export const OrderInfo: FC<{ asModal?: boolean }> = ({ asModal }) => {
   const { number } = useParams();
 
   const dispatch = useDispatch();
@@ -65,13 +67,24 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
+  const Wrapper = asModal ? Modal : 'div';
+
   if (!orderInfo) {
     return <Preloader />;
   }
 
+  if (asModal) {
+    return (
+      <Modal title={`#${orderInfo.number.toString()}`}>
+        <OrderInfoUI orderInfo={orderInfo} />
+      </Modal>
+    );
+  }
+
   return (
-    <Modal title={orderInfo.number.toString()}>
+    <div className={styles.container}>
+      <h2 className={styles.header}>#{orderInfo.number.toString()}</h2>
       <OrderInfoUI orderInfo={orderInfo} />
-    </Modal>
+    </div>
   );
 };

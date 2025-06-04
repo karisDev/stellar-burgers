@@ -1,13 +1,16 @@
 import { FC } from 'react';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'src/services/store';
 import { getIngredientsSelector } from 'src/services/ingredients/slice';
 import { Modal } from '../modal';
 
-export const IngredientDetails: FC = () => {
+import styles from './ingredient-details.module.css';
+
+export const IngredientDetails: FC<{ asModal?: boolean }> = ({ asModal }) => {
   const { id } = useParams();
+  const location = useLocation();
   const ingredientData = useSelector(getIngredientsSelector).find(
     (item) => item._id === id
   );
@@ -16,9 +19,16 @@ export const IngredientDetails: FC = () => {
     return <Preloader />;
   }
 
+  const Wrapper = asModal ? Modal : 'div';
+
   return (
-    <Modal title={'Детали ингредиента'}>
+    <Wrapper title={'Детали ингредиента'} className={styles.content}>
+      {!asModal && (
+        <h3 className={`${styles.header} text text_type_main-large`}>
+          Детали ингредиента
+        </h3>
+      )}
       <IngredientDetailsUI ingredientData={ingredientData} />
-    </Modal>
+    </Wrapper>
   );
 };
