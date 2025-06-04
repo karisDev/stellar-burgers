@@ -83,7 +83,9 @@ export const OrderInfo: FC<{ asModal?: boolean }> = ({ asModal }) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.header}>#{orderInfo.number.toString()}</h2>
+      <h3 className={`${styles.header} text text_type_main-medium`}>
+        #{orderInfo.number.toString()}
+      </h3>
       <OrderInfoUI orderInfo={orderInfo} />
     </div>
   );
